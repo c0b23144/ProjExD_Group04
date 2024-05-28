@@ -21,22 +21,22 @@ class Time():
         screen.blit(self.txt, [800, 0])
 
 
-def GameOver():
+def GameOver(screen: pg.Surface):
     """
     ゲームオーバー画面の表示
     ブラックアウト画面の設定→文字表示の設定→こうかとん表示の設定
     スクリーン表示とディスプレイ更新
     """
-    screen = pg.display.set_mode((WIDTH, HEIGHT))
+    #screen = pg.display.set_mode((WIDTH, HEIGHT))
     #ゲームオーバー画面
-    gm_img = pg.Surface((WIDTH,HEIGHT))  #ブラックアウト
-    pg.draw.rect(gm_img,(0),(0,0,WIDTH,HEIGHT))
-    gm_img.set_alpha(150) #半透明
-    #screen.blit(gm_img, [0, 0]) #変更点（修正するときは消去）
+    gm_img = pg.Surface((WIDTH,HEIGHT), pg.SRCALPHA, 32)  #ブラックアウト
+    gm_img = gm_img.convert_alpha() #半透明
+    screen.blit(gm_img, [0, 0]) #変更点（修正するときは消去）
+
     gm_rct = gm_img.get_rect()
     gm_rct.center = WIDTH/2, HEIGHT/2
     fonto = pg.font.Font(None,100) 
-    txt = fonto.render("Game Over",True,(0))
+    txt = fonto.render("Game Over",True,(255, 255, 255))
     #ゲームオーバー画面のこうかとん
     gm_kk_img = pg.transform.rotozoom(pg.image.load("fig/2.png"), 0, 2.0)
     gm_kk_img2 = pg.transform.flip(gm_kk_img,True,False) #画像反転
@@ -88,7 +88,7 @@ def main():
         if tim.tmr < 7:
             #ブラックアウトと文字、こうかとんの表示
             print("GameOver")
-            GameOver()
+            GameOver(screen)
             pg.time.wait(5000)  #5秒間止める
             return
         screen.blit(bg_img, [0, 0])
