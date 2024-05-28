@@ -21,8 +21,6 @@ class Time():
         screen.blit(self.txt, [800, 0])
 
 
-
-
 def GameOver():
     """
     ゲームオーバー画面の表示
@@ -34,6 +32,7 @@ def GameOver():
     gm_img = pg.Surface((WIDTH,HEIGHT))  #ブラックアウト
     pg.draw.rect(gm_img,(0),(0,0,WIDTH,HEIGHT))
     gm_img.set_alpha(150) #半透明
+    #screen.blit(gm_img, [0, 0]) #変更点（修正するときは消去）
     gm_rct = gm_img.get_rect()
     gm_rct.center = WIDTH/2, HEIGHT/2
     fonto = pg.font.Font(None,100) 
@@ -46,25 +45,25 @@ def GameOver():
     screen.blit(gm_kk_img, (500,370))
     screen.blit(gm_kk_img2, (1050,370))
     pg.display.update()
- 
-
-
 
 def main():
     pg.display.set_caption("はばたけ！こうかとん")
     screen = pg.display.set_mode((1600, 900))
     clock  = pg.time.Clock()
     bg_img = pg.image.load("fig/pg_bg.jpg")
-    bg_img2 = pg.transform.flip(bg_img,True,False)
+    Fscreen = pg.transform.flip(bg_img,True,False)
     kk_img = pg.image.load("fig/3.png")
     kk_img = pg.transform.flip(kk_img,True,False)
     kk_img = pg.transform.rotozoom(kk_img,10,1.0)
     kk_rct = kk_img.get_rect()
     kk_rct.center = 300,200
     tim = Time()
-    
+   
     x=0
     y=0
+    
+    tmr = 0 
+
     #ゲームオーバー画面
     """
     gm_img = pg.Surface((WIDTH,HEIGHT))  #ブラックアウト
@@ -78,31 +77,27 @@ def main():
     gm_kk_img = pg.transform.rotozoom(pg.image.load("fig/2.png"), 0, 2.0)
     gm_kk_img2 = pg.transform.flip(gm_kk_img,True,False) #画像反転
     """
-    
+  
 
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT:
                 return 0
-        screen.blit(bg_img, [0, 0])
-        screen.blit(kk_img,kk_rct)       
-        clock.tick(200)
-        tim.update(screen)
-        clock.tick(1)
-        tim.tmr -= 1
-        if tim.tmr < 0:
+        #screen.blit(bg_img, [0, 0])
+
+        if tim.tmr < 7:
             #ブラックアウトと文字、こうかとんの表示
+            print("GameOver")
             GameOver()
-            """
-            screen.blit(gm_img,gm_rct)
-            screen.blit(txt,[WIDTH/2 - 170, HEIGHT/2 - 40])
-            screen.blit(gm_kk_img, (500,370))
-            screen.blit(gm_kk_img2, (1050,370))
-            """
-            pg.display.update()
             pg.time.wait(5000)  #5秒間止める
             return
         screen.blit(bg_img, [0, 0])
+
+        screen.blit(kk_img,kk_rct)       
+        #clock.tick(200)
+        tim.update(screen)
+        clock.tick(1)
+        tim.tmr -= 1
         pg.display.update() 
 
         """
@@ -112,9 +107,6 @@ def main():
             pg.display.update()
             time.sleep(1)
         """
-
-
-
 
 
 if __name__ == "__main__":
